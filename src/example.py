@@ -1,0 +1,49 @@
+import asyncio
+import sys
+from prompt_enhancer import PromptEnhancer
+
+async def main():
+    try:
+        # Initialize the prompt enhancer with a specific model
+        enhancer = PromptEnhancer(model_name="llama3.2:3b")
+
+        # Example question
+        question = "What are the potential implications of using AI in healthcare diagnostics?"
+
+        print("Sending request to Ollama server...")
+        # Get enhanced response with both chain-of-thought and reflection
+        response = await enhancer.get_enhanced_response(
+            question=question,
+            use_cot=True,
+            use_reflection=True
+        )
+
+        # Print the chain-of-thought response
+        print("\n=== Chain of Thought Analysis ===")
+        print(response['chain_of_thought'])
+
+        # Print the reflection and improvements
+        print("\n=== Reflection and Improvements ===")
+        print(response['reflection'])
+
+        # Evaluate response quality
+        quality_metrics = enhancer.evaluate_response_quality(response)
+        print("\n=== Quality Metrics ===")
+        for metric, score in quality_metrics.items():
+            print(f"{metric}: {score}")
+
+    except ConnectionRefusedError:
+        print("\nError: Could not connect to Ollama server!")
+        print("\nPlease make sure to:")
+        print("1. Install Ollama from https://ollama.ai")
+        print("2. Start the Ollama server by running 'ollama serve' in a terminal")
+        print("3. Pull the required model by running 'ollama pull llama3.2:3b'")
+        sys.exit(1)
+    except Exception as e:
+        print(f"\nAn unexpected error occurred: {str(e)}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    print("Make sure Ollama server is running (run 'ollama serve' in a terminal)")
+    # Run the async example
+    asyncio.run(main()) 
