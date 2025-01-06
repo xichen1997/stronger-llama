@@ -88,12 +88,9 @@ asyncio.run(run_benchmark())
 
 ## Benchmarking
 
-The framework includes tools to benchmark different prompting strategies:
-
-- Response time measurement
-- Quality metrics evaluation
-- Visualization tools
-- Results export
+### primary conclusion
+- small models are limited in their ability to reason, like the llama3.2:3b model couldn't do math and reason very well.
+- the llama3.1:8b model is able do math and basic reasoning, but it's far from perfect.
 
 ## Contributing
 

@@ -85,6 +85,21 @@ class PromptEnhancer:
         except Exception as e:
             raise Exception(f"Error generating response: {str(e)}")
 
+    async def generate_reasoning_queries(self, question: str, cot_response: str, reflection_response: str) -> List[str]:
+        """based on the question, cot response and reflection, generate a list of reasoning queries"""
+        reasoning_queries = f"""based on the question: {question}, cot response and reflection, generate a short answer.
+        
+        COT output:
+        {cot_response}
+        
+        Reflection output:
+        {reflection_response}
+        """
+        reasoning_queries_response = self.client.generate(model=self.model_name, prompt=reasoning_queries)
+        reasoning_queries = reasoning_queries_response['response']
+        print(reasoning_queries)
+        return reasoning_queries
+
     def evaluate_response_quality(self, response: Dict[str, Any]) -> Dict[str, float]:
         """Evaluate the quality of the response based on various metrics."""
         # This is a placeholder for more sophisticated evaluation

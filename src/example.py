@@ -5,11 +5,11 @@ from prompt_enhancer import PromptEnhancer
 async def main():
     try:
         # Initialize the prompt enhancer with a specific model
-        enhancer = PromptEnhancer(model_name="llama3.2:3b")
+        enhancer = PromptEnhancer(model_name="llama3.1:8b")
 
         # Example question
-        question = "What are the potential implications of using AI in healthcare diagnostics?"
-
+        question = '''
+        I'm playing assetto corsa competizione, and I need you to tell me how many liters of fuel to take in a race. The qualifying time was 2:04.317, the race is 20 minutes long, and the car uses 2.73 liters per lap.'''
         print("Sending request to Ollama server...")
         # Get enhanced response with both chain-of-thought and reflection
         response = await enhancer.get_enhanced_response(
@@ -31,6 +31,11 @@ async def main():
         print("\n=== Quality Metrics ===")
         for metric, score in quality_metrics.items():
             print(f"{metric}: {score}")
+
+        reasoning_queries = await enhancer.generate_reasoning_queries(question, response['chain_of_thought'], response['reflection'])
+        print("\n=== Reasoning Queries ===")
+        print(reasoning_queries)
+        
 
     except ConnectionRefusedError:
         print("\nError: Could not connect to Ollama server!")
